@@ -1,5 +1,6 @@
 ﻿using ExpertCentreTechnicalTask.Models;
 using ExpertCentreTechnicalTask.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
@@ -61,7 +62,7 @@ public class NotesController : ControllerBase
         var workspace = _workspaceService.GetWorkspaceById(workspaceId);
         if (workspace == null)
         {
-            return NotFound(new { globalErrors = new[] { new { message = "Указанное рабочее пространство не существует" } } });
+            return BadRequest(new { globalErrors = new[] { new { message = "Указанная заметка не существует" } } });
         }
 
         if (!_noteService.UpdateNote(workspaceId, noteId, updatedNote))
