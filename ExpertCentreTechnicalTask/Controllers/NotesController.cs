@@ -17,6 +17,12 @@ public class NotesController : ControllerBase
     [HttpGet]
     public ActionResult<object> GetNotesByWorkspace(int workspaceId)
     {
+        // Проверка авторизации, если требуется
+        if (!User.Identity.IsAuthenticated)
+        {
+            return Unauthorized();
+        }
+
         var notes = _noteService.GetNotesByWorkspace(workspaceId);
 
         if (notes == null || !notes.Any())
