@@ -1,0 +1,28 @@
+﻿{
+  "title": "Покупки",
+  "body": {
+    "lines": [
+      {
+        "id": 1,
+        "type": 2,
+        "text": "Мебель",
+        "styles": [],
+        "color": 0
+      },
+      {
+        "id": 2,
+        "type": 2,
+        "text": "Компьютеры",
+        "styles": [],
+        "color": 0
+      },
+      {
+        "id": 3,
+        "type": 2,
+        "text": "Напитки",
+        "styles": [],
+        "color": 0
+      }
+    ]
+  }
+}
