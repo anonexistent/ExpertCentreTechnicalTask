@@ -14,27 +14,29 @@ public class NotesController : ControllerBase
         _noteService = noteService;
     }
 
-    [HttpPost]
-    public ActionResult<Note> CreateNoteForWorkspace(int workspaceId)
-    {
-        var note = _noteService.CreateNoteForWorkspace(workspaceId);
-        return CreatedAtAction(nameof(GetNoteById), new { workspaceId, noteId = note.Id }, note);
-    }
-
     [HttpGet]
-    public ActionResult<IEnumerable<Note>> GetNotesByWorkspace(int workspaceId)
+    public ActionResult<object> GetNotesByWorkspace(int workspaceId)
     {
         if (!User.Identity.IsAuthenticated)
         {
             return Unauthorized();
         }
 
-        var notes = _noteService.GetNotesByWorkspace(workspaceId);
+        var notes = _noteService.GetNotesByWorkspace(workspaceId)
+            .Select(n => new { n.Id, n.Title }); // Исключаем body из ответа
+
         if (!notes.Any())
         {
             return NotFound(new { globalErrors = new[] { new { message = "Указанное рабочее пространство не существует" } } });
         }
-        return Ok(notes);
+        return Ok(new { workspaceId = workspaceId, notes = notes });
+    }
+
+    [HttpPost]
+    public ActionResult<Note> CreateNoteForWorkspace(int workspaceId)
+    {
+        var note = _noteService.CreateNoteForWorkspace(workspaceId);
+        return CreatedAtAction(nameof(GetNoteById), new { workspaceId, noteId = note.Id }, note);
     }
 
     [HttpGet("{noteId}")]

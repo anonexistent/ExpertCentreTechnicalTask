@@ -5,7 +5,18 @@ using System.Linq;
 public class NoteService
 {
     private readonly Dictionary<int, List<Note>> workspaceNotes = new();
-    private int nextNoteId = 1;
+    private int nextNoteId = 4;
+
+    public NoteService()
+    {
+        // Инициализация первых трех "пробных" записей
+        workspaceNotes[1] = new List<Note>
+            {
+                new Note { Id = 1, Title = "Планирование", Body = new NoteBody() },
+                new Note { Id = 2, Title = "Задачи", Body = new NoteBody() },
+                new Note { Id = 3, Title = "Отчеты", Body = new NoteBody() }
+            };
+    }
 
     public Note CreateNoteForWorkspace(int workspaceId)
     {
