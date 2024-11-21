@@ -17,19 +17,14 @@ public class NotesController : ControllerBase
     [HttpGet]
     public ActionResult<object> GetNotesByWorkspace(int workspaceId)
     {
-        if (!User.Identity.IsAuthenticated)
-        {
-            return Unauthorized();
-        }
+        var notes = _noteService.GetNotesByWorkspace(workspaceId);
 
-        var notes = _noteService.GetNotesByWorkspace(workspaceId)
-            .Select(n => new { n.Id, n.Title }); // Исключаем body из ответа
-
-        if (!notes.Any())
+        if (notes == null || !notes.Any())
         {
             return NotFound(new { globalErrors = new[] { new { message = "Указанное рабочее пространство не существует" } } });
         }
-        return Ok(new { workspaceId = workspaceId, notes = notes });
+
+        return Ok(new { workspaceId = workspaceId, notes = notes.Select(n => new { n.Id, n.Title }) });
     }
 
     [HttpPost]
